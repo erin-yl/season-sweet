@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { recipes as recipesData } from './recipes.js';
+import RecipeCard from './recipeCard.js';
 
-// Helper function to get the current season based on the month
+// Helper function to get the current season
 const getCurrentSeason = () => {
   const month = new Date().getMonth(); // 0-11
   if (month >= 2 && month <= 4) return "Spring";
@@ -10,7 +11,7 @@ const getCurrentSeason = () => {
   return "Winter";
 };
 
-// Filter Controls Component
+// Filter controls component
 function FilterControls({ activeSeason, setActiveSeason, allergenFilters, setAllergenFilters }) {
   const seasons = ["Spring", "Summer", "Autumn", "Winter"];
   const allergens = ["gluten", "dairy", "egg"];
@@ -60,7 +61,7 @@ function FilterControls({ activeSeason, setActiveSeason, allergenFilters, setAll
 }
 
 
-// Main App Component
+// Main App component
 export default function App() {
   const [recipes, setRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
@@ -86,9 +87,7 @@ export default function App() {
   useEffect(() => {
     // Save current allergen filters to localStorage
     localStorage.setItem('allergenFilters', JSON.stringify(allergenFilters));
-
     let tempRecipes = recipes.filter(recipe => recipe.season === activeSeason);
-
     const activeAllergens = Object.keys(allergenFilters).filter(key => allergenFilters[key]);
 
     if (activeAllergens.length > 0) {
@@ -122,26 +121,16 @@ export default function App() {
         <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredRecipes.length > 0 ? (
             filteredRecipes.map(recipe => (
-              <div key={recipe.id} className="bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
-                <img
-                  src={recipe.image}
-                  alt={recipe.name}
-                  className="w-full h-48 object-cover"
-                  onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/f8f8f8/ccc?text=Image+Not+Found'; }}
-                />
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{recipe.name}</h3>
-                  <div className="flex items-center space-x-2">
-                    <span className="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-2.5 py-0.5 rounded-full">{recipe.season}</span>
-                    <span className="inline-block bg-green-100 text-green-800 text-sm font-semibold px-2.5 py-0.5 rounded-full">{recipe.difficulty}</span>
-                  </div>
-                </div>
-              </div>
+              <RecipeCard 
+                key={recipe.id} 
+                recipe={recipe} 
+                allergenFilters={allergenFilters} 
+              />
             ))
           ) : (
             <div className="col-span-full text-center py-12 bg-white rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold text-gray-700">No Recipes Found</h3>
-              <p className="text-gray-500 mt-2">Try changing your season or allergen filters!</p>
+                <h3 className="text-2xl font-semibold text-gray-700">No Recipes Found</h3>
+                <p className="text-gray-500 mt-2">Try changing your season or allergen filters!</p>
             </div>
           )}
         </main>
