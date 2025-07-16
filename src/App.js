@@ -134,7 +134,6 @@ function FilterControls({
       {weatherRecommendations && (
         <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 rounded-xl border border-blue-100">
           <div className="flex items-center space-x-3 mb-4">
-            <span className="text-2xl">🌤️</span>
             <h3 className="text-xl font-bold text-gray-800">
               Perfect for today's weather
             </h3>
@@ -155,7 +154,6 @@ function FilterControls({
       <div className="mb-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-5 flex items-center space-x-2">
           <span>Choose Your Season</span>
-          <span className="text-2xl">{currentTheme.icon}</span>
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {seasons.map(season => {
@@ -168,8 +166,8 @@ function FilterControls({
                 key={season}
                 onClick={() => setActiveSeason(season)}
                 className={`relative p-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${isActive
-                    ? `${theme.primary} text-white shadow-lg`
-                    : `bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent hover:border-gray-300`
+                  ? `${theme.primary} text-white shadow-lg`
+                  : `bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent hover:border-gray-300`
                   }`}
               >
                 <div className="flex items-center justify-center space-x-2">
@@ -190,7 +188,6 @@ function FilterControls({
       <div>
         <h3 className="text-2xl font-bold text-gray-800 mb-5 flex items-center space-x-2">
           <span>Dietary Preferences</span>
-          <span className="text-xl">🥗</span>
         </h3>
         <p className="text-gray-600 mb-4">Select any allergies to see safe alternatives for all recipes</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -198,8 +195,8 @@ function FilterControls({
             <label
               key={allergen}
               className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all duration-200 border-2 ${allergenFilters[allergen]
-                  ? `${currentTheme.colors.bg} ${currentTheme.colors.border} ${currentTheme.colors.text}`
-                  : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                ? `${currentTheme.colors.bg} ${currentTheme.colors.border} ${currentTheme.colors.text}`
+                : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
                 }`}
             >
               <input
@@ -324,7 +321,6 @@ export default function App() {
             <div className="flex justify-center items-center space-x-2 text-3xl mb-4">
               <span>{currentTheme.icon}</span>
               <span className="text-2xl font-semibold text-gray-600">{activeSeason} Desserts</span>
-              <span>{currentTheme.icon}</span>
             </div>
           </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">

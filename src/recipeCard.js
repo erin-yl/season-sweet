@@ -17,19 +17,11 @@ function ConfidenceBadge({ confidence }) {
   const confidenceStyles = {
     high: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    low: 'bg-red-100 text-red-800 border-red-200',
-  };
-
-  const confidenceIcons = {
-    high: '✅',
-    medium: '⚠️',
-    low: '❌'
   };
 
   return (
     <span className={`inline-flex items-center space-x-1 text-xs font-semibold px-2 py-1 rounded-full border ${confidenceStyles[confidence]}`}>
-      <span>{confidenceIcons[confidence]}</span>
-      <span>{confidence} match</span>
+      <span className="capitalize">{confidence} match</span>
     </span>
   );
 }
@@ -92,8 +84,8 @@ export default function RecipeCard({ recipe, allergenFilters, seasonalTheme }) {
                   <span
                     key={allergen}
                     className={`text-xs px-2 py-1 rounded-full border ${hasSubstitution
-                        ? 'bg-green-100 text-green-800 border-green-200'
-                        : 'bg-gray-100 text-gray-600 border-gray-200'
+                      ? 'bg-green-100 text-green-800 border-green-200'
+                      : 'bg-gray-100 text-gray-600 border-gray-200'
                       }`}
                   >
                     {allergen}-free {hasSubstitution ? '✅' : '❌'}
@@ -105,9 +97,9 @@ export default function RecipeCard({ recipe, allergenFilters, seasonalTheme }) {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <span>👥 {recipe.baseIngredients.length} ingredients</span>
+              <span>{recipe.baseIngredients.length} ingredients</span>
               <span>•</span>
-              <span>⏱️ {recipe.instructions.length} steps</span>
+              <span>{recipe.instructions.length} steps</span>
             </div>
             <button className={`px-4 py-2 text-sm font-medium text-white rounded-full transition-colors ${seasonalTheme.primary} ${seasonalTheme.primaryHover}`}>
               View Recipe
@@ -150,7 +142,6 @@ export default function RecipeCard({ recipe, allergenFilters, seasonalTheme }) {
                 <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <span className="text-2xl">🔄</span>
                       <div>
                         <span className="font-semibold text-gray-800">Allergen-Friendly Mode</span>
                         <p className="text-sm text-gray-600">Toggle to see ingredient substitutions</p>

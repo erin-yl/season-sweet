@@ -4,7 +4,7 @@ export const recipes = [
     "name": "Classic Apple Crumble",
     "season": "Autumn",
     "difficulty": "Easy",
-    "image": "https://images.unsplash.com/photo-1562007908-72e11e85b1cd?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "https://plus.unsplash.com/premium_photo-1695865414385-f85ca8708762?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "baseIngredients": [
       { "name": "Apples", "quantity": "4 large" },
       { "name": "All-Purpose Flour", "quantity": "1 cup" },
@@ -41,14 +41,15 @@ export const recipes = [
       "cool": 0.9,
       "cold": 0.7,
       "tags": ["comfort", "warming"]
-    }
+    },
+    isAiGenerated: false
   },
   {
     "id": 2,
     "name": "Summer Berry Tart",
     "season": "Summer",
     "difficulty": "Medium",
-    "image": "https://images.unsplash.com/photo-1476887334197-56adbf254e1a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "https://images.unsplash.com/photo-1588291258143-d31a5dfe6c30?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "baseIngredients": [
       { "name": "Pie Crust", "quantity": "1 (9-inch)" },
       { "name": "Cream Cheese", "quantity": "8 oz" },
@@ -91,14 +92,15 @@ export const recipes = [
       "hot": 0.9,
       "warm": 0.7,
       "tags": ["refreshing", "light"]
-    }
+    },
+    isAiGenerated: false
   },
   {
     "id": 3,
     "name": "Flourless Chocolate Cake",
     "season": "Winter",
     "difficulty": "Medium",
-    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "https://images.unsplash.com/photo-1707070026861-ae45cb63d845?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "baseIngredients": [
       { "name": "Bittersweet Chocolate", "quantity": "8 oz" },
       { "name": "Butter", "quantity": "1/2 cup" },
@@ -124,25 +126,26 @@ export const recipes = [
         "notes": "Use refined coconut oil to avoid a coconut flavor."
       },
       {
-        "ingredient": "Eggs",
-        "substitute": "Aquafaba (chickpea brine)",
+        "ingredient": "Egg",
+        "substitute": "1 tbsp Ground Flaxseed + 3 tbsp Water",
         "allergen": "egg",
-        "confidence": "low",
-        "notes": "3 tbsp of aquafaba per egg. This substitution is tricky and may affect the structure."
+        "confidence": "medium",
+        "notes": "Mix and let it sit for 5 minutes to form a gel. Best for binding in baked goods."
       }
     ],
     "weatherPreferences": {
       "cool": 0.7,
       "cold": 0.9,
       "tags": ["warming", "rich"]
-    }
+    },
+    isAiGenerated: false
   },
   {
     "id": 4,
     "name": "Spring Lemon Bars",
     "season": "Spring",
     "difficulty": "Easy",
-    "image": "https://images.unsplash.com/photo-1628878496236-9a435f4bfd3d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "https://images.unsplash.com/photo-1628878639854-cdd283c9149b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "baseIngredients": [
       { "name": "All-Purpose Flour", "quantity": "1 cup" },
       { "name": "Butter", "quantity": "1/2 cup, melted" },
@@ -187,6 +190,54 @@ export const recipes = [
       "hot": 0.7,
       "warm": 0.9,
       "tags": ["fresh", "fruity"]
-    }
+    },
+    isAiGenerated: false
   }
 ]
+
+// Mock AI recipe
+export const generateAIRecipe = async (season, allergens = []) => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  const seasonalIngredients = {
+    Spring: ['strawberries', 'rhubarb', 'lemon', 'mint'],
+    Summer: ['peaches', 'berries', 'cherries', 'lime'],
+    Autumn: ['apples', 'pears', 'pumpkin', 'cinnamon'],
+    Winter: ['chocolate', 'oranges', 'vanilla', 'nutmeg']
+  };
+
+  const ingredients = seasonalIngredients[season];
+  const mainIngredient = ingredients[Math.floor(Math.random() * ingredients.length)];
+
+  return {
+    id: Date.now(),
+    name: `AI-Generated ${season} ${mainIngredient.charAt(0).toUpperCase() + mainIngredient.slice(1)} Delight`,
+    season,
+    difficulty: ['Easy', 'Medium'][Math.floor(Math.random() * 2)],
+    image: `https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
+    baseIngredients: [
+      { name: mainIngredient, quantity: "2 cups" },
+      { name: "Sugar", quantity: "1/2 cup" },
+      { name: "Flour", quantity: "1 cup" },
+      { name: "Butter", quantity: "1/4 cup" }
+    ],
+    instructions: [
+      `Prepare the ${mainIngredient} according to season.`,
+      "Mix dry ingredients in a large bowl.",
+      "Combine wet ingredients separately.",
+      "Fold ingredients together gently.",
+      "Bake at 350°F for 25-30 minutes.",
+      "Cool completely before serving."
+    ],
+    allergens: allergens.length > 0 ? allergens : ["gluten", "dairy"],
+    substitutions: allergens.map(allergen => ({
+      ingredient: allergen === "gluten" ? "Flour" : "Butter",
+      substitute: allergen === "gluten" ? "Almond Flour" : "Coconut Oil",
+      allergen,
+      confidence: "high",
+      notes: `AI-optimized ${allergen}-free alternative that maintains texture and flavor.`
+    })),
+    isGenerated: true
+  };
+};
