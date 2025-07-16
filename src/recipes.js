@@ -126,7 +126,7 @@ export const recipes = [
         "notes": "Use refined coconut oil to avoid a coconut flavor."
       },
       {
-        "ingredient": "Egg",
+        "ingredient": "Eggs",
         "substitute": "1 tbsp Ground Flaxseed + 3 tbsp Water",
         "allergen": "egg",
         "confidence": "medium",
