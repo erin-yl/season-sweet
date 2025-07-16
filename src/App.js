@@ -113,112 +113,22 @@ function WeatherStatus({ weatherData, isLoading, error }) {
   return null;
 }
 
-function FilterControls({
-  activeSeason,
-  setActiveSeason,
-  allergenFilters,
-  setAllergenFilters,
-  weatherData,
-  weatherRecommendations
-}) {
-  
-  const currentTheme = seasonalThemes[activeSeason];
-
-  return (
-    <div className="mb-10 p-8 rounded-2xl bg-white shadow-lg border border-gray-100">
-      {weatherRecommendations && (
-        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 rounded-xl border border-blue-100">
-          <div className="flex items-center space-x-3 mb-4">
-            <h3 className="text-xl font-bold text-gray-800">
-              Perfect for today's weather
-            </h3>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {weatherRecommendations.suggestions.map(suggestion => (
-              <span
-                key={suggestion}
-                className="px-4 py-2 bg-blue-100 text-blue-900 text-sm font-medium rounded-full shadow-sm border border-blue-200"
-              >
-                {suggestion}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-          <span>Choose Your Season</span>
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {Object.keys(seasonalThemes).map(season => {
-            const theme = seasonalThemes[season];
-            const isActive = activeSeason === season;
-            return (
-              <button
-                key={season}
-                onClick={() => setActiveSeason(season)}
-                className={`p-3 rounded-xl font-medium transition-all duration-200 ${isActive
-                  ? `${theme.primary} text-white shadow-sm`
-                  : `bg-gray-50 text-gray-700 hover:bg-gray-100`
-                  }`}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <span>{theme.icon}</span>
-                  <span>{season}</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-          <span>Dietary Preferences</span>
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {Object.keys(allergenFilters).map(allergen => (
-            <label
-              key={allergen}
-              className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border ${allergenFilters[allergen]
-                ? `${currentTheme.accent}`
-                : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
-                }`}
-            >
-              <input
-                type="checkbox"
-                checked={allergenFilters[allergen]}
-                onChange={() => setAllergenFilters(prev => ({ ...prev, [allergen]: !prev[allergen] }))}
-                className="w-4 h-4 rounded border-gray-300"
-              />
-              <span className="font-medium capitalize">{allergen}-Free</span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // Main App component
 export default function App() {
   const [recipes, setRecipes] = useState(recipesData);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
-
-  // Weather-related state
-  const [weatherData, setWeatherData] = useState(null);
-  const [weatherRecommendations, setWeatherRecommendations] = useState(null);
-  const [weatherLoading, setWeatherLoading] = useState(false);
-  const [weatherError, setWeatherError] = useState(null);
-
-  // Existing state
   const [activeSeason, setActiveSeason] = useState(getCurrentSeason());
   const [allergenFilters, setAllergenFilters] = useState({
     gluten: false,
     dairy: false,
     egg: false,
   });
+
+  // Weather-related state
+  const [weatherData, setWeatherData] = useState(null);
+  const [weatherRecommendations, setWeatherRecommendations] = useState(null);
+  const [weatherLoading, setWeatherLoading] = useState(false);
+  const [weatherError, setWeatherError] = useState(null);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const currentTheme = seasonalThemes[activeSeason];
@@ -275,6 +185,7 @@ export default function App() {
     fetchUserWeather();
   }, []);
 
+
   // Load recipes and saved filters
   useEffect(() => {
     setRecipes(recipesData);
@@ -316,7 +227,7 @@ export default function App() {
     <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient}`}>
       <div className="container mx-auto px-4 py-8">
         <header className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
             SeasonSweet
           </h1>
           <div className="flex justify-center items-center gap-2 text-2xl mb-4">
@@ -335,33 +246,78 @@ export default function App() {
           error={weatherError}
         />
 
-        <FilterControls
-          activeSeason={activeSeason}
-          setActiveSeason={setActiveSeason}
-          allergenFilters={allergenFilters}
-          setAllergenFilters={setAllergenFilters}
-          weatherData={weatherData}
-          weatherRecommendations={weatherRecommendations}
-        />
+        <div className="mb-8 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+          <div className="mb-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span>Choose Your Season</span>
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {Object.keys(seasonalThemes).map(season => {
+                const theme = seasonalThemes[season];
+                const isActive = activeSeason === season;
+                return (
+                  <button
+                    key={season}
+                    onClick={() => setActiveSeason(season)}
+                    className={`p-3 rounded-xl font-medium transition-all duration-200 ${isActive
+                        ? `${theme.primary} text-white shadow-sm`
+                        : `bg-gray-50 text-gray-700 hover:bg-gray-100`
+                      }`}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <span>{theme.icon}</span>
+                      <span>{season}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-        <div className="flex justify-center">
-          <button
-            onClick={generateNewRecipe}
-            disabled={isGenerating}
-            className={`flex items-center gap-2 px-6 py-3 text-white rounded-full font-medium transition-colors ${currentTheme.primary} disabled:opacity-50 disabled:cursor-not-allowed`}
-          >
-            {isGenerating ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Generating AI Recipe...
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4" />
-                Generate AI Recipe
-              </>
-            )}
-          </button>
+          <div className="mb-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span>Dietary Preferences</span>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {Object.keys(allergenFilters).map(allergen => (
+                <label
+                  key={allergen}
+                  className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border ${allergenFilters[allergen]
+                      ? `${currentTheme.accent}`
+                      : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={allergenFilters[allergen]}
+                    onChange={() => setAllergenFilters(prev => ({ ...prev, [allergen]: !prev[allergen] }))}
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  <span className="font-medium capitalize">{allergen}-Free</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              onClick={generateNewRecipe}
+              disabled={isGenerating}
+              className={`flex items-center gap-2 px-6 py-3 text-white rounded-full font-medium transition-colors ${currentTheme.primary} disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Generating AI Recipe...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4" />
+                  Generate AI Recipe
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -400,7 +356,7 @@ export default function App() {
           )}
         </main>
 
-        <footer className="mt-16 text-center text-gray-500">
+        <footer className="mt-12 text-center text-gray-500">
           <p className="text-sm">Made with ❤️ for dessert lovers everywhere</p>
         </footer>
       </div>
