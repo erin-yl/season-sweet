@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, Sparkles } from 'lucide-react';
+import { LoaderCircle, Sparkles } from 'lucide-react';
 import { recipes as recipesData, generateAIRecipe } from './recipes.js';
 import RecipeCard from './recipeCard.js';
 import { fetchWeatherData, getWeatherBasedSeason, getLocationBasedRecommendations } from './weatherService.js';
@@ -16,35 +16,32 @@ const getCurrentSeason = () => {
 // Seasonal themes
 const seasonalThemes = {
   Spring: {
-    gradient: 'from-green-50 via-emerald-50 to-teal-50',
-    primary: 'bg-green-600',
-    primaryHover: 'hover:bg-green-700',
-    accent: 'bg-green-100 text-green-800',
+    gradient: 'from-fuchsia-50 via-rose-50 to-red-50',
+    primary: 'bg-fuchsia-700',
+    accent: 'bg-fuchsia-50 text-fuchsia-800',
     icon: '🌸',
     colors: {
-      bg: 'bg-green-50',
-      text: 'text-green-800',
-      border: 'border-green-200'
+      bg: 'bg-fuchsia-50',
+      text: 'text-fuchsia-800',
+      border: 'border-fuchsia-200'
     }
   },
   Summer: {
-    gradient: 'from-yellow-50 via-orange-50 to-red-50',
-    primary: 'bg-orange-500',
-    primaryHover: 'hover:bg-orange-600',
-    accent: 'bg-orange-100 text-orange-800',
-    icon: '☀️',
+    gradient: 'from-green-50 via-emerald-50 to-teal-50',
+    primary: 'bg-emerald-700',
+    accent: 'bg-emerald-50 text-emerald-800',
+    icon: '🍉',
     colors: {
-      bg: 'bg-orange-50',
-      text: 'text-orange-800',
-      border: 'border-orange-200'
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-800',
+      border: 'border-emerald-200'
     }
   },
   Autumn: {
     gradient: 'from-orange-50 via-amber-50 to-yellow-50',
-    primary: 'bg-amber-600',
-    primaryHover: 'hover:bg-amber-700',
-    accent: 'bg-amber-100 text-amber-800',
-    icon: '🍂',
+    primary: 'bg-amber-700',
+    accent: 'bg-amber-50 text-amber-800',
+    icon: '🍁',
     colors: {
       bg: 'bg-amber-50',
       text: 'text-amber-800',
@@ -52,10 +49,9 @@ const seasonalThemes = {
     }
   },
   Winter: {
-    gradient: 'from-blue-50 via-indigo-50 to-purple-50',
-    primary: 'bg-indigo-600',
-    primaryHover: 'hover:bg-indigo-700',
-    accent: 'bg-indigo-100 text-indigo-800',
+    gradient: 'from-blue-50 via-indigo-50 to-violet-50',
+    primary: 'bg-indigo-700',
+    accent: 'bg-indigo-50 text-indigo-800',
     icon: '❄️',
     colors: {
       bg: 'bg-indigo-50',
@@ -94,14 +90,14 @@ function WeatherStatus({ weatherData, isLoading, error }) {
     const location = weatherData.name;
 
     return (
-      <div className="mb-6 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl border border-emerald-200 shadow-sm">
+      <div className="mb-6 p-4 bg-white rounded-2xl border border-gray-100">
         <div className="flex items-center space-x-3">
-          <span className="text-xl">🌡️</span>
+          <span className="text-xl">🌤️</span>
           <div>
-            <p className="text-emerald-800 font-medium">
+            <p className="text-gray-800 font-medium">
               Current conditions in {location}: {temp}°C, {condition}
             </p>
-            <p className="text-sm text-emerald-600 mt-1">
+            <p className="text-sm text-gray-600 mt-1">
               Recommendations adjusted for your local weather
             </p>
           </div>
@@ -230,11 +226,6 @@ export default function App() {
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
             SeasonSweet
           </h1>
-          <div className="flex justify-center items-center gap-2 text-2xl mb-4">
-            <span>{currentTheme.icon}</span>
-            <span className="text-xl font-semibold text-gray-700">{activeSeason} Desserts</span>
-            <span>{currentTheme.icon}</span>
-          </div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Discover perfect seasonal desserts with AI-powered recipes and allergen-friendly alternatives.
           </p>
@@ -246,7 +237,7 @@ export default function App() {
           error={weatherError}
         />
 
-        <div className="mb-8 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+        <div className="mb-8 p-6 rounded-2xl bg-white border border-gray-100">
           <div className="mb-6">
             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
               <span>Choose Your Season</span>
@@ -260,8 +251,8 @@ export default function App() {
                     key={season}
                     onClick={() => setActiveSeason(season)}
                     className={`p-3 rounded-xl font-medium transition-all duration-200 ${isActive
-                        ? `${theme.primary} text-white shadow-sm`
-                        : `bg-gray-50 text-gray-700 hover:bg-gray-100`
+                      ? `${theme.primary} text-white shadow-sm`
+                      : `bg-gray-50 text-gray-700 hover:bg-gray-100`
                       }`}
                   >
                     <div className="flex items-center justify-center gap-2">
@@ -283,8 +274,8 @@ export default function App() {
                 <label
                   key={allergen}
                   className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border ${allergenFilters[allergen]
-                      ? `${currentTheme.accent}`
-                      : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                    ? `${currentTheme.accent}`
+                    : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
                     }`}
                 >
                   <input
@@ -307,7 +298,7 @@ export default function App() {
             >
               {isGenerating ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <LoaderCircle className="w-4 h-4 animate-spin" />
                   Generating AI Recipe...
                 </>
               ) : (
@@ -335,23 +326,6 @@ export default function App() {
               <div className="text-4xl mb-4">🔍</div>
               <h3 className="text-2xl font-bold text-gray-700 mb-2">No Recipes Found</h3>
               <p className="text-gray-500 mb-4">Try changing your filters or generate a new AI recipe!</p>
-              <button
-                onClick={generateNewRecipe}
-                disabled={isGenerating}
-                className={`flex items-center gap-2 px-6 py-3 text-white rounded-full font-medium transition-colors mx-auto ${currentTheme.primary} disabled:opacity-50`}
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4" />
-                    Generate AI Recipe
-                  </>
-                )}
-              </button>
             </div>
           )}
         </main>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChefHat, Sparkles, Clock, Users } from 'lucide-react';
+import { ChefHat, Sparkles, Clock, ShoppingBasket } from 'lucide-react';
 
 const difficultyColors = {
   'Easy': 'bg-green-100 text-green-800 border-green-200',
@@ -89,7 +89,7 @@ export default function RecipeCard({ recipe, allergenFilters, seasonalTheme }) {
           <div className="flex items-center justify-between text-sm text-gray-500">
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1">
-                <ChefHat className="w-4 h-4" />
+                <ShoppingBasket className="w-4 h-4" />
                 {recipe.baseIngredients.length} ingredients
               </span>
               <span className="flex items-center gap-1">
@@ -161,7 +161,7 @@ export default function RecipeCard({ recipe, allergenFilters, seasonalTheme }) {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                   <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <ChefHat className="w-5 h-5" />
+                    <ShoppingBasket className="w-5 h-5" />
                     Ingredients
                   </h4>
                   <div className="space-y-2">
@@ -201,7 +201,7 @@ export default function RecipeCard({ recipe, allergenFilters, seasonalTheme }) {
 
                 <div>
                   <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <Users className="w-5 h-5" />
+                    <ChefHat className="w-5 h-5" />
                     Instructions
                   </h4>
                   <div className="space-y-3">

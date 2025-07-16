@@ -215,7 +215,7 @@ export const generateAIRecipe = async (season, allergens = []) => {
     name: `AI-Generated ${season} ${mainIngredient.charAt(0).toUpperCase() + mainIngredient.slice(1)} Delight`,
     season,
     difficulty: ['Easy', 'Medium'][Math.floor(Math.random() * 2)],
-    image: `https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
+    image: `https://images.unsplash.com/photo-1542116021-0ff087fb0a41?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
     baseIngredients: [
       { name: mainIngredient, quantity: "2 cups" },
       { name: "Sugar", quantity: "1/2 cup" },
