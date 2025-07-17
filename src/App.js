@@ -18,6 +18,7 @@ const seasonalThemes = {
   Spring: {
     gradient: 'from-fuchsia-50 via-rose-50 to-red-50',
     primary: 'bg-fuchsia-700',
+    hover: 'hover:bg-fuchsia-800',
     accent: 'bg-fuchsia-50 text-fuchsia-800',
     icon: '🌸',
     colors: {
@@ -29,6 +30,7 @@ const seasonalThemes = {
   Summer: {
     gradient: 'from-green-50 via-emerald-50 to-teal-50',
     primary: 'bg-emerald-700',
+    hover: 'hover:bg-emerald-800',
     accent: 'bg-emerald-50 text-emerald-800',
     icon: '🍉',
     colors: {
@@ -40,6 +42,7 @@ const seasonalThemes = {
   Autumn: {
     gradient: 'from-orange-50 via-amber-50 to-yellow-50',
     primary: 'bg-amber-700',
+    hover: 'hover:bg-amber-800',
     accent: 'bg-amber-50 text-amber-800',
     icon: '🍁',
     colors: {
@@ -51,6 +54,7 @@ const seasonalThemes = {
   Winter: {
     gradient: 'from-blue-50 via-indigo-50 to-violet-50',
     primary: 'bg-indigo-700',
+    hover: 'hover:bg-indigo-800',
     accent: 'bg-indigo-50 text-indigo-800',
     icon: '❄️',
     colors: {
@@ -134,7 +138,7 @@ export default function App() {
     try {
       const activeAllergens = Object.keys(allergenFilters).filter(key => allergenFilters[key]);
       const newRecipe = await generateAIRecipe(activeSeason, activeAllergens);
-      setRecipes(prev => [...prev, newRecipe]);
+      setRecipes(prev => [newRecipe, ...prev]);
     } catch (error) {
       console.error('Failed to generate recipe:', error);
     } finally {
@@ -251,7 +255,7 @@ export default function App() {
                     key={season}
                     onClick={() => setActiveSeason(season)}
                     className={`p-3 rounded-xl font-medium transition-all duration-200 ${isActive
-                      ? `${theme.primary} text-white shadow-sm`
+                      ? `${theme.primary} ${theme.hover} text-white shadow-sm`
                       : `bg-gray-50 text-gray-700 hover:bg-gray-100`
                       }`}
                   >
@@ -294,7 +298,7 @@ export default function App() {
             <button
               onClick={generateNewRecipe}
               disabled={isGenerating}
-              className={`flex items-center gap-2 px-6 py-3 text-white rounded-full font-medium transition-colors ${currentTheme.primary} disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`flex items-center gap-2 px-6 py-3 text-white rounded-full font-medium transition-colors ${currentTheme.primary} ${currentTheme.hover} disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {isGenerating ? (
                 <>

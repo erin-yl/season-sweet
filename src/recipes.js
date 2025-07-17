@@ -195,49 +195,60 @@ export const recipes = [
   }
 ]
 
-// Mock AI recipe
+// Generate a new recipe using the Gemini API.
 export const generateAIRecipe = async (season, allergens = []) => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  const allergenText = allergens.length > 0
+    ? `The user is allergic to ${allergens.join(', ')}. The recipe must be completely free of these allergens and provide high-quality substitutions.`
+    : "The recipe can use common ingredients like gluten, dairy, and eggs.";
 
-  const seasonalIngredients = {
-    Spring: ['strawberries', 'rhubarb', 'lemon', 'mint'],
-    Summer: ['peaches', 'berries', 'cherries', 'lime'],
-    Autumn: ['apples', 'pears', 'pumpkin', 'cinnamon'],
-    Winter: ['chocolate', 'oranges', 'vanilla', 'nutmeg']
-  };
+  const prompt = `
+    You are a creative pastry chef who specializes in seasonal, allergen-friendly desserts.
+    Generate a single, unique dessert recipe for the ${season} season.
+    ${allergenText}
 
-  const ingredients = seasonalIngredients[season];
-  const mainIngredient = ingredients[Math.floor(Math.random() * ingredients.length)];
+    Your response MUST be a valid JSON object only, without any markdown formatting or extra text.
+    The JSON object must follow this exact structure:
+    {
+      "name": "Recipe Name",
+      "difficulty": "Easy",
+      "baseIngredients": [{"name": "Ingredient Name", "quantity": "Amount"}],
+      "instructions": ["Step 1.", "Step 2."],
+      "allergens": ["gluten", "dairy"],
+      "substitutions": [{"ingredient": "Original Ingredient", "substitute": "Substitute", "allergen": "allergen", "confidence": "high", "notes": "Helpful tip."}]
+    }
 
-  return {
-    id: Date.now(),
-    name: `AI-Generated ${season} ${mainIngredient.charAt(0).toUpperCase() + mainIngredient.slice(1)} Delight`,
-    season,
-    difficulty: ['Easy', 'Medium'][Math.floor(Math.random() * 2)],
-    image: `https://images.unsplash.com/photo-1542116021-0ff087fb0a41?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`,
-    baseIngredients: [
-      { name: mainIngredient, quantity: "2 cups" },
-      { name: "Sugar", quantity: "1/2 cup" },
-      { name: "Flour", quantity: "1 cup" },
-      { name: "Butter", quantity: "1/4 cup" }
-    ],
-    instructions: [
-      `Prepare the ${mainIngredient} according to season.`,
-      "Mix dry ingredients in a large bowl.",
-      "Combine wet ingredients separately.",
-      "Fold ingredients together gently.",
-      "Bake at 350°F for 25-30 minutes.",
-      "Cool completely before serving."
-    ],
-    allergens: allergens.length > 0 ? allergens : ["gluten", "dairy"],
-    substitutions: allergens.map(allergen => ({
-      ingredient: allergen === "gluten" ? "Flour" : "Butter",
-      substitute: allergen === "gluten" ? "Almond Flour" : "Coconut Oil",
-      allergen,
-      confidence: "high",
-      notes: `AI-optimized ${allergen}-free alternative that maintains texture and flavor.`
-    })),
-    isGenerated: true
-  };
+    - 'difficulty' must be one of: "Easy", "Medium", "Hard".
+    - 'allergens' should be an array of allergens present in the *original* version of the recipe.
+    - 'substitutions' must contain an entry for each allergen specified by the user. 'confidence' must be "high" or "medium".
+  `;
+
+  try {
+    const response = await fetch('/api/generate-recipe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(`API error: ${response.statusText} - ${errorData}`);
+    }
+
+    const aiRecipeData = await response.json();
+
+    // Assemble the final recipe object for the frontend
+    const recipeNameForImage = aiRecipeData.name.split(' ').join('+');
+
+    return {
+      id: Date.now(),
+      ...aiRecipeData,
+      season,
+      image: `https://source.unsplash.com/800x600/?${recipeNameForImage},dessert`, // Dynamic Unsplash image
+      isGenerated: true,
+    };
+
+  } catch (error) {
+    console.error("Error generating AI recipe:", error);
+    throw error;
+  }
 };
