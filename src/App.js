@@ -227,7 +227,7 @@ export default function App() {
     <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient}`}>
       <div className="container mx-auto px-4 py-8">
         <header className="text-center mb-10">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-4xl font-bold text-gray-900 mb-4">
             SeasonSweet
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">

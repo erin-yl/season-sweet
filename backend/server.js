@@ -42,7 +42,40 @@ app.post('/api/generate-recipe', async (req, res) => {
   }
 });
 
-// --- Start the Server ---
+app.post('/api/get-image', async (req, res) => {
+  try {
+    const { query } = req.body;
+
+    if (!query) {
+      return res.status(400).json({ error: 'Image query is required.' });
+    }
+
+    const unsplashUrl = `https://api.unsplash.com/search/photos?query=${query}&per_page=1&orientation=landscape`;
+
+    const imageResponse = await fetch(unsplashUrl, {
+      headers: {
+        'Authorization': `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
+      }
+    });
+
+    if (!imageResponse.ok) {
+      throw new Error('Failed to fetch image from Unsplash.');
+    }
+
+    const imageData = await imageResponse.json();
+
+    // Find a valid image URL, with a fallback
+    const imageUrl = imageData.results[0]?.urls?.regular ?? 'https://images.unsplash.com/photo-1542116021-0ff087fb0a41'; // Fallback image
+
+    res.json({ imageUrl });
+
+  } catch (error) {
+    console.error('Error fetching from Unsplash:', error);
+    // Don't crash the app, just send a fallback image
+    res.json({ imageUrl: 'https://images.unsplash.com/photo-1542116021-0ff087fb0a41' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

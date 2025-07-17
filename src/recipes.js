@@ -223,32 +223,37 @@ export const generateAIRecipe = async (season, allergens = []) => {
   `;
 
   try {
-    const response = await fetch('/api/generate-recipe', {
+    // Generate the recipe details from Gemini
+    const recipeResponse = await fetch('/api/generate-recipe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt }),
     });
+    
+    if (!recipeResponse.ok) throw new Error('Failed to generate recipe details.');
+    const aiRecipeData = await recipeResponse.json();
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      throw new Error(`API error: ${response.statusText} - ${errorData}`);
-    }
+    // Get an image from Unsplash
+    const imageResponse = await fetch('/api/get-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: `${aiRecipeData.name} dessert` }), // Use the AI-generated name as a query
+    });
 
-    const aiRecipeData = await response.json();
+    if (!imageResponse.ok) throw new Error('Failed to generate image.');
+    const { imageUrl } = await imageResponse.json();
 
-    // Assemble the final recipe object for the frontend
-    const recipeNameForImage = aiRecipeData.name.split(' ').join('+');
-
+    // Assemble the final recipe object with the new dynamic image
     return {
       id: Date.now(),
       ...aiRecipeData,
       season,
-      image: `https://source.unsplash.com/800x600/?${recipeNameForImage},dessert`, // Dynamic Unsplash image
+      image: imageUrl,
       isGenerated: true,
     };
 
   } catch (error) {
-    console.error("Error generating AI recipe:", error);
+    console.error("Error in AI recipe generation process:", error);
     throw error;
   }
 };
