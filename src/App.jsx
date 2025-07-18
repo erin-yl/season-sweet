@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { LoaderCircle, Sparkles } from 'lucide-react';
 import { recipes as recipesData, generateAIRecipe } from './recipes.js';
-import RecipeCard from './recipeCard.js';
+import RecipeCard from './recipeCard.jsx';
 import { fetchWeatherData, getWeatherBasedSeason, getLocationBasedRecommendations } from './weatherService.js';
 
 // Season determination with weather data
@@ -171,12 +171,12 @@ export default function App() {
 
             setWeatherLoading(false);
           } catch (error) {
-            setWeatherError('Failed to fetch weather data');
+            setWeatherError('Failed to fetch weather data', error);
             setWeatherLoading(false);
           }
         },
         (error) => {
-          setWeatherError('Location access denied');
+          setWeatherError('Location access denied', error);
           setWeatherLoading(false);
         }
       );
@@ -210,13 +210,6 @@ export default function App() {
             (sub.confidence === 'high' || sub.confidence === 'medium')
           )
         );
-      });
-    }
-
-    // Weather-based sorting (if available)
-    if (weatherRecommendations) {
-      tempRecipes = tempRecipes.sort((a, b) => {
-        return 0;
       });
     }
 

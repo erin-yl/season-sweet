@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChefHat, Sparkles, Clock, ShoppingBasket } from 'lucide-react';
 
 const difficultyColors = {
@@ -164,7 +164,7 @@ export default function RecipeCard({ recipe, allergenFilters, seasonalTheme }) {
                     Ingredients
                   </h4>
                   <div className="space-y-2">
-                    {recipe.baseIngredients.map((ing, index) => {
+                    {recipe.baseIngredients.map((ing) => {
                       const substitution = showSubstitutions
                         ? recipe.substitutions.find(sub => sub.ingredient === ing.name && allergenFilters[sub.allergen])
                         : null;

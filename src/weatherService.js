@@ -1,7 +1,4 @@
-const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-const WEATHER_API_BASE = 'https://api.openweathermap.org/data/2.5';
-
-export const getWeatherBasedSeason = (weatherData, location) => {
+export const getWeatherBasedSeason = (weatherData) => {
   const { main, weather } = weatherData;
   const temp = main.temp;
   const condition = weather[0].main;
@@ -38,9 +35,13 @@ export const getWeatherBasedSeason = (weatherData, location) => {
 
 export const fetchWeatherData = async (latitude, longitude) => {
   try {
-    const response = await fetch(
-      `${WEATHER_API_BASE}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}&units=metric`
-    );
+    const response = await fetch('/api/get-weather', { // Call our secure backend endpoint
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ latitude, longitude }),
+    });
     
     if (!response.ok) {
       throw new Error('Weather API request failed');
@@ -53,7 +54,7 @@ export const fetchWeatherData = async (latitude, longitude) => {
   }
 };
 
-export const getLocationBasedRecommendations = (weatherData, recipes) => {
+export const getLocationBasedRecommendations = (weatherData) => {
   const temp = weatherData.main.temp;
   const condition = weatherData.weather[0].main;
   

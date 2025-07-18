@@ -76,6 +76,29 @@ app.post('/api/get-image', async (req, res) => {
   }
 });
 
+app.post('/api/get-weather', async (req, res) => {
+  try {
+    const { latitude, longitude } = req.body;
+    if (!latitude || !longitude) {
+      return res.status(400).json({ error: 'Latitude and longitude are required.' });
+    }
+
+    const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}&units=metric`;
+
+    const weatherResponse = await fetch(weatherApiUrl);
+    if (!weatherResponse.ok) {
+      throw new Error('Failed to fetch weather data from OpenWeatherMap.');
+    }
+    
+    const weatherData = await weatherResponse.json();
+    res.json(weatherData);
+
+  } catch (error) {
+    console.error('Error in weather endpoint:', error);
+    res.status(500).json({ error: 'Failed to get weather data.' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
