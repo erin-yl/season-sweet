@@ -89,7 +89,8 @@ function WeatherStatus({ weatherData, isLoading, error }) {
   }
 
   if (weatherData) {
-    const temp = Math.round(weatherData.main.temp);
+    const tempC = Math.round(weatherData.main.temp);
+    const tempF = Math.round(tempC * 9 / 5 + 32);
     const condition = weatherData.weather[0].description;
     const location = weatherData.name;
 
@@ -99,7 +100,8 @@ function WeatherStatus({ weatherData, isLoading, error }) {
           <span className="text-xl">🌤️</span>
           <div>
             <p className="text-gray-800 font-medium">
-              Current conditions in {location}: {temp}°C, {condition}
+              {/* Updated to show both C and F */}
+              Current conditions in {location}: {tempF}°F / {tempC}°C, {condition}
             </p>
             <p className="text-sm text-gray-600 mt-1">
               Recommendations adjusted for your local weather
