@@ -59,8 +59,9 @@ app.post('/api/get-image', async (req, res) => {
     const result = await unsplash.search.getPhotos({
       query,
       page: 1,
-      perPage: 10,
+      perPage: 3,
       orientation: 'squarish',
+      content_filter: 'high',
     });
 
     if (result.errors) {

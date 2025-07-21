@@ -215,15 +215,15 @@ export const generateAIRecipe = async (season, allergens = []) => {
       "instructions": ["Step 1.", "Step 2."],
       "allergens": ["gluten", "dairy"],
       "substitutions": [{"ingredient": "Original Ingredient", "substitute": "Substitute", "allergen": "allergen", "confidence": "high", "notes": "Helpful tip."}],
-      "imageQuery": "A descriptive search query for Unsplash to find a relevant photo of this dessert."
+      "imageQuery": "A search query for Unsplash to find a relevant photo of this dessert."
     }
 
     - 'difficulty' must be one of: "Easy", "Medium", "Hard".
     - 'allergens' should be an array of allergens present in the *original* version of the recipe.
     - 'substitutions' must contain an entry for each allergen specified by the user. 'confidence' must be "high" or "medium".
-    - 'imageQuery' must include exactly one common dessert type and exactly one flavor element, such as a fruit, nut, or sweet ingredient.
+    - 'imageQuery' must include the dessert type and primary flavor element, such as a fruit, nut, or sweet ingredient.
     - 'imageQuery' must not include any of the following words: "recipe", "delicious", "homemade", "fresh", "AI", "generated", "cooking", "baking".
-    - 'imageQuery' should be a visually descriptive phrase about the dessert's appearance, not taste or preparation.
+    - 'imageQuery' should be a descriptive phrase about the dessert's visual appearance, not taste or preparation.
   `;
 
   try {
