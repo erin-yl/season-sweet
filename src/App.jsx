@@ -225,7 +225,7 @@ export default function App() {
           <h1 className="text-4xl md:text-4xl font-bold text-gray-900 mb-4">
             SeasonSweet
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 mx-auto">
             Discover perfect seasonal desserts with AI-powered recipes and allergen-friendly alternatives.
           </p>
         </header>

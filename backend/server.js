@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const { createApi } = require('unsplash-js')
 
 require('dotenv').config({ path: path.resolve(__dirname, './.env') });
 
@@ -8,16 +9,23 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // Initialize the Express app
 const app = express();
-const port = process.env.PORT || 5001; // Use port 5001 or one defined in .env
+const port = process.env.PORT || 5001;
 
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(express.json()); // Enable parsing of JSON request bodies
+app.use(cors());
+app.use(express.json());
 
 if (!process.env.GEMINI_API_KEY) {
   throw new Error('GEMINI_API_KEY is not set in the environment variables.');
 }
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+if (!process.env.UNSPLASH_ACCESS_KEY) {
+  throw new Error('UNSPLASH_ACCESS_KEY is not set in the environment variables.');
+}
+const unsplash = createApi({
+  accessKey: process.env.UNSPLASH_ACCESS_KEY,
+});
 
 app.post('/api/generate-recipe', async (req, res) => {
   try {
@@ -38,41 +46,41 @@ app.post('/api/generate-recipe', async (req, res) => {
 
   } catch (error) {
     console.error('Error communicating with Gemini API:', error);
-    res.status(500).json({ error: 'Failed to generate recipe. Please try again later.' });
+    res.status(500).json({ error: 'Failed to generate recipe.' });
   }
 });
 
 app.post('/api/get-image', async (req, res) => {
   try {
     const { query } = req.body;
+    if (!query) return res.status(400).json({ error: 'Image query is required.' });
 
-    if (!query) {
-      return res.status(400).json({ error: 'Image query is required.' });
-    }
-
-    const unsplashUrl = `https://api.unsplash.com/search/photos?query=${query}&per_page=1&orientation=landscape`;
-
-    const imageResponse = await fetch(unsplashUrl, {
-      headers: {
-        'Authorization': `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
-      }
+    // This will now work because 'unsplash' is defined
+    const result = await unsplash.search.getPhotos({
+      query,
+      page: 1,
+      perPage: 10,
+      orientation: 'squarish',
     });
 
-    if (!imageResponse.ok) {
-      throw new Error('Failed to fetch image from Unsplash.');
+    if (result.errors) {
+      return res.status(500).json({ error: result.errors[0] });
     }
 
-    const imageData = await imageResponse.json();
+    const photos = result.response?.results;
 
-    // Find a valid image URL, with a fallback
-    const imageUrl = imageData.results[0]?.urls?.regular ?? 'https://images.unsplash.com/photo-1542116021-0ff087fb0a41'; // Fallback image
+    if (!photos || photos.length === 0) {
+      return res.json({ imageUrl: 'https://images.unsplash.com/photo-1542116021-0ff087fb0a41?q=80&w=1172' });
+    }
 
-    res.json({ imageUrl });
+    const randomIndex = Math.floor(Math.random() * photos.length);
+    const randomPhoto = photos[randomIndex];
+
+    res.json({ imageUrl: randomPhoto.urls.regular });
 
   } catch (error) {
-    console.error('Error fetching from Unsplash:', error);
-    // Don't crash the app, just send a fallback image
-    res.json({ imageUrl: 'https://images.unsplash.com/photo-1542116021-0ff087fb0a41' });
+    console.error('Error in /api/get-image:', error);
+    res.status(500).json({ error: 'Failed to fetch image.' });
   }
 });
 
@@ -89,7 +97,7 @@ app.post('/api/get-weather', async (req, res) => {
     if (!weatherResponse.ok) {
       throw new Error('Failed to fetch weather data from OpenWeatherMap.');
     }
-    
+
     const weatherData = await weatherResponse.json();
     res.json(weatherData);
 

@@ -202,11 +202,11 @@ export const generateAIRecipe = async (season, allergens = []) => {
     : "The recipe can use common ingredients like gluten, dairy, and eggs.";
 
   const prompt = `
-    You are a creative pastry chef who specializes in seasonal, allergen-friendly desserts.
-    Generate a single, unique dessert recipe for the ${season} season.
+    You are a pastry chef who specializes in seasonal, allergen-friendly desserts.
+    Generate a dessert recipe for the ${season} season.
     ${allergenText}
 
-    Your response MUST be a valid JSON object only, without any markdown formatting or extra text.
+    Your response must be a valid JSON object only, without any markdown formatting or extra text.
     The JSON object must follow this exact structure:
     {
       "name": "Recipe Name",
@@ -214,12 +214,16 @@ export const generateAIRecipe = async (season, allergens = []) => {
       "baseIngredients": [{"name": "Ingredient Name", "quantity": "Amount"}],
       "instructions": ["Step 1.", "Step 2."],
       "allergens": ["gluten", "dairy"],
-      "substitutions": [{"ingredient": "Original Ingredient", "substitute": "Substitute", "allergen": "allergen", "confidence": "high", "notes": "Helpful tip."}]
+      "substitutions": [{"ingredient": "Original Ingredient", "substitute": "Substitute", "allergen": "allergen", "confidence": "high", "notes": "Helpful tip."}],
+      "imageQuery": "A descriptive search query for Unsplash to find a relevant photo of this dessert."
     }
 
     - 'difficulty' must be one of: "Easy", "Medium", "Hard".
     - 'allergens' should be an array of allergens present in the *original* version of the recipe.
     - 'substitutions' must contain an entry for each allergen specified by the user. 'confidence' must be "high" or "medium".
+    - 'imageQuery' must include exactly one common dessert type and exactly one flavor element, such as a fruit, nut, or sweet ingredient.
+    - 'imageQuery' must not include any of the following words: "recipe", "delicious", "homemade", "fresh", "AI", "generated", "cooking", "baking".
+    - 'imageQuery' should be a visually descriptive phrase about the dessert's appearance, not taste or preparation.
   `;
 
   try {
@@ -229,15 +233,17 @@ export const generateAIRecipe = async (season, allergens = []) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt }),
     });
-    
+
     if (!recipeResponse.ok) throw new Error('Failed to generate recipe details.');
     const aiRecipeData = await recipeResponse.json();
+
+    const imageQuery = aiRecipeData.imageQuery;
 
     // Get an image from Unsplash
     const imageResponse = await fetch('/api/get-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: `${aiRecipeData.name} dessert` }), // Use the AI-generated name as a query
+      body: JSON.stringify({ query: imageQuery }),
     });
 
     if (!imageResponse.ok) throw new Error('Failed to generate image.');
