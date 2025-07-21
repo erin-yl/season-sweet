@@ -228,7 +228,7 @@ export const generateAIRecipe = async (season, allergens = []) => {
 
   try {
     // Generate the recipe details from Gemini
-    const recipeResponse = await fetch('/api/generate-recipe', {
+    const recipeResponse = await fetch('https://season-sweet.onrender.com', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt }),
@@ -240,7 +240,7 @@ export const generateAIRecipe = async (season, allergens = []) => {
     const imageQuery = aiRecipeData.imageQuery;
 
     // Get an image from Unsplash
-    const imageResponse = await fetch('/api/get-image', {
+    const imageResponse = await fetch('https://season-sweet.onrender.com', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: imageQuery }),
