@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './apiConfig';
+
 export const recipes = [
   {
     "id": 1,
@@ -225,10 +227,10 @@ export const generateAIRecipe = async (season, allergens = []) => {
     - 'imageQuery' must not include any of the following words: "recipe", "delicious", "homemade", "fresh", "AI", "generated", "cooking", "baking".
     - 'imageQuery' should be a descriptive phrase about the dessert's visual appearance, not taste or preparation.
   `;
-
+  
   try {
     // Generate the recipe details from Gemini
-    const recipeResponse = await fetch('https://season-sweet.onrender.com/api/generate-recipe', {
+    const recipeResponse = await fetch(`${API_BASE_URL}/api/generate-recipe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt }),
@@ -240,7 +242,7 @@ export const generateAIRecipe = async (season, allergens = []) => {
     const imageQuery = aiRecipeData.imageQuery;
 
     // Get an image from Unsplash
-    const imageResponse = await fetch('https://season-sweet.onrender.com/api/get-image', {
+    const imageResponse = await fetch(`${API_BASE_URL}/api/get-image`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: imageQuery }),

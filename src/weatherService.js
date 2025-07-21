@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './apiConfig';
+
 export const getWeatherBasedSeason = (weatherData) => {
   const { main, weather } = weatherData;
   const temp = main.temp;
@@ -35,18 +37,18 @@ export const getWeatherBasedSeason = (weatherData) => {
 
 export const fetchWeatherData = async (latitude, longitude) => {
   try {
-    const response = await fetch('https://season-sweet.onrender.com/api/get-weather', {
+    const response = await fetch(`${API_BASE_URL}/api/get-weather`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ latitude, longitude }),
     });
-    
+
     if (!response.ok) {
       throw new Error('Weather API request failed');
     }
-    
+
     return await response.json();
   } catch (error) {
     console.error('Weather fetch error:', error);
@@ -57,7 +59,7 @@ export const fetchWeatherData = async (latitude, longitude) => {
 export const getLocationBasedRecommendations = (weatherData) => {
   const temp = weatherData.main.temp;
   const condition = weatherData.weather[0].main;
-  
+
   // Temperature-based dessert preferences
   const recommendations = {
     hot: ['frozen', 'cold', 'refreshing', 'light'],

@@ -27,7 +27,7 @@ const unsplash = createApi({
   accessKey: process.env.UNSPLASH_ACCESS_KEY,
 });
 
-app.post('https://season-sweet.onrender.com/api/generate-recipe', async (req, res) => {
+app.post('/api/generate-recipe', async (req, res) => {
   try {
     const { prompt } = req.body;
 
@@ -50,7 +50,7 @@ app.post('https://season-sweet.onrender.com/api/generate-recipe', async (req, re
   }
 });
 
-app.post('https://season-sweet.onrender.com/api/get-image', async (req, res) => {
+app.post('/api/get-image', async (req, res) => {
   try {
     const { query } = req.body;
     if (!query) return res.status(400).json({ error: 'Image query is required.' });
@@ -79,12 +79,12 @@ app.post('https://season-sweet.onrender.com/api/get-image', async (req, res) => 
     res.json({ imageUrl: randomPhoto.urls.regular });
 
   } catch (error) {
-    console.error('Error communicating with Unsplash API:', error);
+    console.error('Error in /api/get-image:', error);
     res.status(500).json({ error: 'Failed to fetch image.' });
   }
 });
 
-app.post('https://season-sweet.onrender.com/api/get-weather', async (req, res) => {
+app.post('/api/get-weather', async (req, res) => {
   try {
     const { latitude, longitude } = req.body;
     if (!latitude || !longitude) {
