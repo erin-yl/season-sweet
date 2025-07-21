@@ -35,7 +35,7 @@ export const getWeatherBasedSeason = (weatherData) => {
 
 export const fetchWeatherData = async (latitude, longitude) => {
   try {
-    const response = await fetch('https://season-sweet.onrender.com', {
+    const response = await fetch('https://season-sweet.onrender.com/api/get-weather', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
